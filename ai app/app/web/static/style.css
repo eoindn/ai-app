@@ -1,0 +1,75 @@
+:root {
+  --bg: #ffffff;
+  --text: #1b1b1b;
+  --muted: #4a4a4a;
+  --primary: #0b5394;
+  --primary-dark: #073763;
+  --border: #b7b7b7;
+  --surface: #f3f5f7;
+  --success-bg: #e6f4ea;
+  --success: #1e5e2f;
+  --error-bg: #fce8e6;
+  --error: #8c1d18;
+  --focus: #ffbf47;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--text); background: var(--bg); line-height: 1.5; }
+a { color: var(--primary); }
+a:hover { color: var(--primary-dark); }
+
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; box-shadow: 0 0 0 5px var(--text); }
+
+.skip-link { position: absolute; left: -9999px; top: 0; background: var(--focus); color: var(--text); padding: .5rem 1rem; z-index: 10; }
+.skip-link:focus { left: 0; }
+
+.site-header { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 2rem; padding: .75rem 1.5rem; background: var(--primary-dark); color: #fff; }
+.site-header a { color: #fff; }
+.brand a { font-weight: 700; font-size: 1.25rem; text-decoration: none; }
+.tagline { font-size: .875rem; opacity: .9; }
+.site-header nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 1rem; margin: 0; padding: 0; }
+.user-box { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
+.role-badge { background: #fff; color: var(--primary-dark); border-radius: 3px; padding: 0 .4rem; font-size: .8rem; font-weight: 600; }
+.link-button { background: none; border: 1px solid #fff; color: #fff; padding: .25rem .75rem; cursor: pointer; border-radius: 3px; font: inherit; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+h1 { margin-top: 0; }
+
+.notice { padding: .75rem 1rem; border-left: 5px solid; margin-bottom: 1rem; }
+.notice-success { background: var(--success-bg); border-color: var(--success); color: var(--success); }
+.notice-error { background: var(--error-bg); border-color: var(--error); color: var(--error); }
+.notice-title { font-size: 1rem; margin: 0 0 .25rem; }
+.notice ul { margin: 0; padding-left: 1.25rem; }
+
+table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+caption { text-align: left; font-weight: 600; padding-bottom: .5rem; }
+th, td { text-align: left; padding: .5rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { background: var(--surface); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.card { background: var(--surface); border: 1px solid var(--border); padding: 1rem; border-radius: 4px; }
+.card .num { font-size: 1.75rem; font-weight: 700; display: block; }
+
+.panel { border: 1px solid var(--border); border-radius: 4px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+.panel h2 { margin-top: 0; font-size: 1.2rem; }
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+
+form.stacked label { display: block; font-weight: 600; margin-top: .75rem; }
+form.stacked .hint { display: block; font-weight: 400; color: var(--muted); font-size: .875rem; }
+input, select, textarea { font: inherit; padding: .4rem .5rem; border: 2px solid var(--muted); border-radius: 3px; width: 100%; max-width: 32rem; background: #fff; color: var(--text); }
+textarea { min-height: 5rem; }
+form.inline { display: inline-flex; gap: .5rem; align-items: flex-end; flex-wrap: wrap; }
+form.inline input, form.inline select { width: auto; }
+button, .button { font: inherit; background: var(--primary); color: #fff; border: 2px solid var(--primary); padding: .4rem 1rem; border-radius: 3px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: .75rem; }
+button:hover, .button:hover { background: var(--primary-dark); color: #fff; }
+button.secondary { background: #fff; color: var(--primary); }
+button.danger { background: var(--error); border-color: var(--error); }
+form.inline button { margin-top: 0; }
+
+.status { font-weight: 600; padding: 0 .4rem; border-radius: 3px; border: 1px solid; white-space: nowrap; }
+.status-AVAILABLE { color: var(--success); border-color: var(--success); }
+.status-BOOKED { color: var(--primary-dark); border-color: var(--primary-dark); }
+.status-UNDER_MAINTENANCE { color: #6b4200; border-color: #6b4200; }
+.status-OUT_OF_SERVICE, .overdue { color: var(--error); border-color: var(--error); }
+.muted { color: var(--muted); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

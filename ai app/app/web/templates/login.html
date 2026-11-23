@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<h1>Log in</h1>
+<form method="post" action="/login" class="stacked" novalidate>
+  {{ field('username', 'Username', errors, form.username or '', required=true, attrs='autocomplete="username" maxlength="30"') }}
+  {{ field('password', 'Password', errors, '', type='password', required=true, attrs='autocomplete="current-password" maxlength="128"') }}
+  <button type="submit">Log in</button>
+</form>
+{% endblock %}

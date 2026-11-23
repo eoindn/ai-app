@@ -1,0 +1,20 @@
+{# Accessible form field: label, hint, aria-invalid + aria-describedby when the field has an error. #}
+{% macro field(name, label, errors, value='', type='text', required=false, hint='', attrs='', prefix='') -%}
+{%- set id = prefix ~ name -%}
+{%- set errs = errors | selectattr('field', 'equalto', name) | list -%}
+<label for="{{ id }}">{{ label }}{% if not required %} <span class="hint" style="display:inline">(optional)</span>{% endif %}
+  {% if hint %}<span class="hint" id="{{ id }}-hint">{{ hint }}</span>{% endif %}
+</label>
+{% if errs %}<span class="notice-error" id="{{ id }}-error" style="display:block;padding:.1rem .4rem">{{ errs[0].message }}</span>{% endif %}
+{% if type == 'textarea' %}
+<textarea id="{{ id }}" name="{{ name }}" {% if required %}required{% endif %} {% if errs %}aria-invalid="true"{% endif %}
+  aria-describedby="{% if hint %}{{ id }}-hint {% endif %}{% if errs %}{{ id }}-error{% endif %}" {{ attrs | safe }}>{{ value }}</textarea>
+{% else %}
+<input id="{{ id }}" name="{{ name }}" type="{{ type }}" value="{{ value }}" {% if required %}required{% endif %} {% if errs %}aria-invalid="true"{% endif %}
+  aria-describedby="{% if hint %}{{ id }}-hint {% endif %}{% if errs %}{{ id }}-error{% endif %}" {{ attrs | safe }}>
+{% endif %}
+{%- endmacro %}
+
+{% macro status_badge(status) -%}
+<span class="status status-{{ status.value }}">{{ status.value | replace('_', ' ') }}</span>
+{%- endmacro %}

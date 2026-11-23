@@ -1,0 +1,25 @@
+[project]
+name = "lemms"
+version = "0.1.0"
+description = "Laboratory Equipment & Maintenance Management System (system under test for CPS6002)"
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S", "SIM", "DTZ"]
+ignore = ["S101", "B008", "N818"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/clock.py" = ["DTZ"]
+"tests/**" = ["S", "DTZ"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

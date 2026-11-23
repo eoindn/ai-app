@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block title %}Equipment{% endblock %}
+{% block content %}
+<h1>Equipment</h1>
+{% if can('equipment.create') %}<p><a class="button" href="/equipment/new">Add equipment</a></p>{% endif %}
+
+<form method="get" action="/equipment" class="inline" role="search" aria-label="Search equipment">
+  <div><label for="q">Search</label><br><input id="q" name="q" type="search" value="{{ q }}" maxlength="100" placeholder="ID, name or location"></div>
+  <div><label for="status">Status</label><br>
+    <select id="status" name="status">
+      <option value="">Any status</option>
+      {% for s in statuses %}<option value="{{ s.value }}" {% if s.value == status %}selected{% endif %}>{{ s.value | replace('_',' ') | lower }}</option>{% endfor %}
+    </select></div>
+  <button type="submit">Search</button>
+</form>
+
+<table>
+  <caption>{{ total }} item{{ '' if total == 1 else 's' }} found</caption>
+  <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Location</th><th scope="col">Status</th></tr></thead>
+  <tbody>
+  {% for e in items %}
+    <tr><td><a href="/equipment/{{ e.equipment_id }}">{{ e.equipment_id }}</a></td><td>{{ e.name }}</td><td>{{ e.location }}</td><td>{{ status_badge(e.status) }}</td></tr>
+  {% else %}
+    <tr><td colspan="4">No equipment matches your search.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if pages > 1 %}
+<nav aria-label="Pagination"><p>
+  {% if page > 1 %}<a href="?q={{ q | urlencode }}&status={{ status }}&page={{ page - 1 }}">Previous</a>{% endif %}
+  Page {{ page }} of {{ pages }}
+  {% if page < pages %}<a href="?q={{ q | urlencode }}&status={{ status }}&page={{ page + 1 }}">Next</a>{% endif %}
+</p></nav>
+{% endif %}
+{% endblock %}

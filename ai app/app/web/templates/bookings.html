@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Bookings{% endblock %}
+{% block content %}
+<h1>{{ 'All bookings' if scope == 'all' else 'My bookings' }}</h1>
+{% if can('booking.view_all') %}
+<p>{% if scope == 'all' %}<a href="/bookings?scope=mine">Show only my bookings</a>{% else %}<a href="/bookings?scope=all">Show all bookings</a>{% endif %}</p>
+{% endif %}
+<table>
+  <thead><tr><th scope="col">#</th><th scope="col">Equipment</th><th scope="col">Start</th><th scope="col">End</th>{% if scope == 'all' %}<th scope="col">Booked by</th>{% endif %}<th scope="col">Purpose</th><th scope="col">Status</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead>
+  <tbody>
+  {% for b in bookings %}
+    <tr>
+      <td>{{ b.id }}</td>
+      <td><a href="/equipment/{{ b.equipment.equipment_id }}">{{ b.equipment.equipment_id }}</a> {{ b.equipment.name }}</td>
+      <td>{{ b.start | dt }}</td><td>{{ b.end | dt }}</td>
+      {% if scope == 'all' %}<td>{{ b.user.display_name }}</td>{% endif %}
+      <td>{{ b.purpose }}</td>
+      <td>{{ b.status.value | lower }}{% if b.cancel_reason and b.cancel_reason.value == 'EQUIPMENT_OUT_OF_SERVICE' %} (equipment out of service){% endif %}</td>
+      <td>
+        {% if b.status.value == 'CONFIRMED' and b.start > now and (b.user_id == actor.id or can('booking.cancel_any')) %}
+        <form method="post" action="/bookings/{{ b.id }}/cancel?scope={{ scope }}" class="inline">
+          <button type="submit" class="secondary" aria-label="Cancel booking {{ b.id }}">Cancel</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="8">No bookings.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}LEMMS{% endblock %} – LEMMS</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="brand"><a href="/">LEMMS</a> <span class="tagline">Lab Equipment &amp; Maintenance</span></div>
+    {% if actor %}
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/equipment">Equipment</a></li>
+        <li><a href="/bookings">Bookings</a></li>
+        <li><a href="/faults">Faults</a></li>
+        {% if can('maintenance.view') %}<li><a href="/maintenance">Maintenance</a></li>{% endif %}
+        {% if can('user.manage') %}<li><a href="/users">Users</a></li>{% endif %}
+      </ul>
+    </nav>
+    <div class="user-box">
+      <span>{{ actor.display_name }} <span class="role-badge">{{ actor.role }}</span></span>
+      <form method="post" action="/logout"><button type="submit" class="link-button">Log out</button></form>
+    </div>
+    {% endif %}
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div aria-live="polite" aria-atomic="true">
+      {% if message %}<p class="notice notice-success" role="status">{{ message }}</p>{% endif %}
+    </div>
+    <div aria-live="assertive" aria-atomic="true">
+      {% if errors %}
+      <div class="notice notice-error" role="alert" id="form-errors">
+        <h2 class="notice-title">There is a problem</h2>
+        <ul>
+          {% for err in errors %}<li>{% if err.field and err.field != 'form' %}<strong>{{ err.field }}</strong>: {% endif %}{{ err.message }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

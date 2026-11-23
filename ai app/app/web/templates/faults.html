@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Faults{% endblock %}
+{% block content %}
+<h1>Faults</h1>
+<p class="muted">To report a fault, open the equipment page.</p>
+<form method="get" action="/faults" class="inline">
+  <div><label for="status">Status</label><br>
+    <select id="status" name="status">
+      <option value="">Any status</option>
+      {% for s in statuses %}<option value="{{ s.value }}" {% if s.value == status %}selected{% endif %}>{{ s.value | replace('_',' ') | lower }}</option>{% endfor %}
+    </select></div>
+  <button type="submit">Filter</button>
+</form>
+<table>
+  <thead><tr><th scope="col">#</th><th scope="col">Equipment</th><th scope="col">Title / description</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Reported</th>{% if can('fault.update') %}<th scope="col">Actions</th>{% endif %}</tr></thead>
+  <tbody>
+  {% for fl in faults %}
+    <tr>
+      <td>{{ fl.id }}</td>
+      <td><a href="/equipment/{{ fl.equipment.equipment_id }}">{{ fl.equipment.equipment_id }}</a></td>
+      <td><strong>{{ fl.title }}</strong><br>{{ fl.description }}{% if fl.resolution_notes %}<br><em>Resolution:</em> {{ fl.resolution_notes }}{% endif %}</td>
+      <td>{{ fl.severity.value }}</td>
+      <td>{{ fl.status.value | replace('_',' ') }}</td>
+      <td>{{ fl.reported_at | dt }}<br><span class="muted">{{ fl.reporter.display_name }}</span></td>
+      {% if can('fault.update') %}
+      <td>
+        {% if fl.status.value == 'OPEN' %}
+        <form method="post" action="/faults/{{ fl.id }}/start" class="inline"><button type="submit" aria-label="Start work on fault {{ fl.id }}">Start work</button></form>
+        {% elif fl.status.value == 'IN_PROGRESS' %}
+        <form method="post" action="/faults/{{ fl.id }}/resolve" class="stacked" novalidate>
+          <label for="notes-{{ fl.id }}">Resolution notes <span class="hint">5–1000 characters</span></label>
+          <textarea id="notes-{{ fl.id }}" name="resolution_notes" maxlength="1000" required>{% if form_fault_id == fl.id %}{{ form.resolution_notes }}{% endif %}</textarea>
+          <button type="submit">Resolve</button>
+        </form>
+        {% endif %}
+      </td>
+      {% endif %}
+    </tr>
+  {% else %}
+    <tr><td colspan="7">No faults.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field, status_badge %}
+{% block title %}{{ e.equipment_id }}{% endblock %}
+{% block content %}
+{% set f = form if form_name else {} %}
+<h1>{{ e.equipment_id }}: {{ e.name }}</h1>
+<p>{{ status_badge(e.status) }} · Location: <strong>{{ e.location }}</strong></p>
+{% if e.description %}<p>{{ e.description }}</p>{% endif %}
+
+{% if can('equipment.update') or can('equipment.delete') %}
+<p>
+  {% if can('equipment.update') %}<a class="button" href="/equipment/{{ e.equipment_id }}/edit">Edit details</a>{% endif %}
+  {% if can('equipment.delete') %}
+  <form method="post" action="/equipment/{{ e.equipment_id }}/delete" class="inline"
+        onsubmit="return confirm('Delete {{ e.equipment_id }}? This cannot be undone.');">
+    <button type="submit" class="danger">Delete</button>
+  </form>
+  {% endif %}
+</p>
+{% endif %}
+
+<div class="grid-2">
+  <section class="panel" aria-labelledby="book-h">
+    <h2 id="book-h">Book this equipment</h2>
+    <form method="post" action="/equipment/{{ e.equipment_id }}/book" class="stacked" novalidate>
+      {{ field('start', 'Start (UK time)', errors if form_name == 'book' else [], f.start or '', type='datetime-local', required=true, hint='15-minute steps, e.g. 10:00 or 10:15', attrs='step="900"', prefix='book-') }}
+      {{ field('end', 'End (UK time)', errors if form_name == 'book' else [], f.end or '', type='datetime-local', required=true, hint='30 minutes to 8 hours after start', attrs='step="900"', prefix='book-') }}
+      {{ field('purpose', 'Purpose', errors if form_name == 'book' else [], f.purpose or '', required=true, hint='3–200 characters', attrs='maxlength="200"', prefix='book-') }}
+      <button type="submit">Book</button>
+    </form>
+  </section>
+
+  <section class="panel" aria-labelledby="fault-h">
+    <h2 id="fault-h">Report a fault</h2>
+    <form method="post" action="/equipment/{{ e.equipment_id }}/fault" class="stacked" novalidate>
+      {{ field('title', 'Title', errors if form_name == 'fault' else [], f.title or '', required=true, hint='3–100 characters', attrs='maxlength="100"', prefix='fault-') }}
+      {{ field('description', 'Description', errors if form_name == 'fault' else [], f.description or '', type='textarea', required=true, hint='10–1000 characters', attrs='maxlength="1000"', prefix='fault-') }}
+      <label for="fault-severity">Severity</label>
+      <select id="fault-severity" name="severity" required>
+        {% for s in severities %}<option value="{{ s.value }}" {% if f.severity == s.value %}selected{% endif %}>{{ s.value | lower }}</option>{% endfor %}
+      </select>
+      <button type="submit">Report fault</button>
+    </form>
+  </section>
+</div>
+
+{% if events %}
+<section class="panel" aria-labelledby="status-h">
+  <h2 id="status-h">Change status</h2>
+  <form method="post" action="/equipment/{{ e.equipment_id }}/status" class="stacked" novalidate>
+    <label for="status-event">Action</label>
+    <select id="status-event" name="event" required>
+      {% for ev, label in events %}<option value="{{ ev.value }}" {% if f.event == ev.value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    {{ field('booking_id', 'Booking number', errors if form_name == 'status' else [], f.booking_id or '', type='number', hint='Required for check out: the booking that is active now', attrs='min="1"', prefix='status-') }}
+    {{ field('reason', 'Reason', errors if form_name == 'status' else [], f.reason or '', hint='Required (5–500 characters) when taking out of service. Future bookings will be cancelled.', attrs='maxlength="500"', prefix='status-') }}
+    <button type="submit">Apply</button>
+  </form>
+</section>
+{% endif %}
+
+<section aria-labelledby="sched-h">
+  <h2 id="sched-h">Upcoming bookings</h2>
+  <table>
+    <thead><tr><th scope="col">#</th><th scope="col">Start</th><th scope="col">End</th><th scope="col">Booked by</th><th scope="col">Purpose</th></tr></thead>
+    <tbody>
+    {% for b, show in schedule %}
+      <tr><td>{{ b.id }}</td><td>{{ b.start | dt }}</td><td>{{ b.end | dt }}</td>
+        <td>{% if show %}{{ b.user.display_name }}{% else %}<span class="muted">Another user</span>{% endif %}</td>
+        <td>{% if show %}{{ b.purpose }}{% else %}<span class="muted">Hidden</span>{% endif %}</td></tr>
+    {% else %}<tr><td colspan="5">No upcoming bookings.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section aria-labelledby="faults-h">
+  <h2 id="faults-h">Faults</h2>
+  <table>
+    <thead><tr><th scope="col">#</th><th scope="col">Title</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">Reported</th></tr></thead>
+    <tbody>
+    {% for fl in faults %}
+      <tr><td>{{ fl.id }}</td><td>{{ fl.title }}</td><td>{{ fl.severity.value }}</td><td>{{ fl.status.value | replace('_',' ') }}</td><td>{{ fl.reported_at | dt }}</td></tr>
+    {% else %}<tr><td colspan="5">No faults reported.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% if tasks %}
+<section aria-labelledby="tasks-h">
+  <h2 id="tasks-h">Maintenance tasks</h2>
+  <table>
+    <thead><tr><th scope="col">#</th><th scope="col">Title</th><th scope="col">Due</th><th scope="col">Assigned to</th><th scope="col">Status</th></tr></thead>
+    <tbody>{% for t in tasks %}
+      <tr><td>{{ t.id }}</td><td>{{ t.title }}</td><td>{{ t.due_date.strftime('%d %b %Y') }}</td><td>{{ t.assignee.display_name }}</td><td>{{ t.status.value | replace('_',' ') }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+</section>
+{% endif %}
+
+{% if history %}
+<section aria-labelledby="hist-h">
+  <h2 id="hist-h">Status history</h2>
+  <table>
+    <thead><tr><th scope="col">When</th><th scope="col">Change</th><th scope="col">Event</th><th scope="col">By</th><th scope="col">Reason</th></tr></thead>
+    <tbody>{% for c in history %}
+      <tr><td>{{ c.changed_at | dt }}</td><td>{{ c.from_status.value }} → {{ c.to_status.value }}</td><td>{{ c.event }}</td><td>{{ c.user.display_name }}</td><td>{{ c.reason or '' }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

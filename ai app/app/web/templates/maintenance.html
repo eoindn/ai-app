@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Maintenance{% endblock %}
+{% block content %}
+<h1>Maintenance</h1>
+<p>{% if overdue_only %}<a href="/maintenance">Show all tasks</a>{% else %}<a href="/maintenance?overdue=1">Show overdue only</a>{% endif %}</p>
+
+{% if can('maintenance.schedule') %}
+<section class="panel" aria-labelledby="new-h">
+  <h2 id="new-h">Schedule maintenance</h2>
+  <form method="post" action="/maintenance/new" class="stacked" novalidate>
+    <label for="m-equipment">Equipment</label>
+    <select id="m-equipment" name="equipment_id" required>
+      {% for e in equipment %}<option value="{{ e.equipment_id }}" {% if form.equipment_id == e.equipment_id %}selected{% endif %}>{{ e.equipment_id }} – {{ e.name }}</option>{% endfor %}
+    </select>
+    {{ field('title', 'Title', errors, form.title or '', required=true, hint='3–100 characters', attrs='maxlength="100"', prefix='m-') }}
+    {{ field('description', 'Description', errors, form.description or '', type='textarea', hint='Up to 1000 characters', attrs='maxlength="1000"', prefix='m-') }}
+    {{ field('due_date', 'Due date', errors, form.due_date or '', type='date', required=true, attrs='min="' ~ today ~ '"', prefix='m-') }}
+    <label for="m-tech">Assign technician</label>
+    <select id="m-tech" name="assigned_technician_id" required>
+      {% for t in technicians %}<option value="{{ t.id }}" {% if form.assigned_technician_id == t.id|string %}selected{% endif %}>{{ t.display_name }}</option>{% endfor %}
+    </select>
+    <button type="submit">Schedule</button>
+  </form>
+</section>
+{% endif %}
+
+<table>
+  <thead><tr><th scope="col">#</th><th scope="col">Equipment</th><th scope="col">Task</th><th scope="col">Due</th><th scope="col">Assigned</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+  <tbody>
+  {% for t, overdue in tasks %}
+    <tr>
+      <td>{{ t.id }}</td>
+      <td><a href="/equipment/{{ t.equipment.equipment_id }}">{{ t.equipment.equipment_id }}</a><br><span class="muted">{{ t.equipment.status.value | replace('_',' ') | lower }}</span></td>
+      <td><strong>{{ t.title }}</strong>{% if t.description %}<br>{{ t.description }}{% endif %}{% if t.completion_notes %}<br><em>Notes:</em> {{ t.completion_notes }}{% endif %}</td>
+      <td>{{ t.due_date.strftime('%d %b %Y') }}{% if overdue %}<br><span class="status overdue">Overdue</span>{% endif %}</td>
+      <td>{{ t.assignee.display_name }}</td>
+      <td>{{ t.status.value | replace('_',' ') }}</td>
+      <td>
+        {% set mine = t.assigned_technician_id == actor.id or can('maintenance.work_any') %}
+        {% if t.status.value == 'SCHEDULED' and mine %}
+          <form method="post" action="/maintenance/{{ t.id }}/start" class="inline"><button type="submit" aria-label="Start task {{ t.id }}">Start</button></form>
+        {% endif %}
+        {% if t.status.value == 'IN_PROGRESS' and mine %}
+          <form method="post" action="/maintenance/{{ t.id }}/complete" class="stacked">
+            <label for="cn-{{ t.id }}">Completion notes <span class="hint">optional, up to 1000</span></label>
+            <textarea id="cn-{{ t.id }}" name="completion_notes" maxlength="1000"></textarea>
+            <button type="submit">Complete</button>
+          </form>
+        {% endif %}
+        {% if t.status.value == 'SCHEDULED' and can('maintenance.cancel') %}
+          <form method="post" action="/maintenance/{{ t.id }}/cancel" class="inline"><button type="submit" class="secondary" aria-label="Cancel task {{ t.id }}">Cancel</button></form>
+        {% endif %}
+        {% if t.status.value in ('SCHEDULED', 'IN_PROGRESS') and can('maintenance.assign') %}
+          <form method="post" action="/maintenance/{{ t.id }}/assign" class="inline">
+            <label for="as-{{ t.id }}" class="visually-hidden">Reassign task {{ t.id }}</label>
+            <select id="as-{{ t.id }}" name="assigned_technician_id">
+              {% for tech in technicians %}<option value="{{ tech.id }}" {% if tech.id == t.assigned_technician_id %}selected{% endif %}>{{ tech.display_name }}</option>{% endfor %}
+            </select>
+            <button type="submit" class="secondary">Reassign</button>
+          </form>
+        {% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7">No maintenance tasks.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

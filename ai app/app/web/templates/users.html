@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}Users{% endblock %}
+{% block content %}
+<h1>Users</h1>
+<section class="panel" aria-labelledby="new-h">
+  <h2 id="new-h">Create user</h2>
+  <form method="post" action="/users" class="stacked" novalidate>
+    {{ field('username', 'Username', errors, form.username or '', required=true, hint='3–30 characters: lowercase letters, digits, underscore', attrs='maxlength="30" autocomplete="off"') }}
+    {{ field('display_name', 'Display name', errors, form.display_name or '', required=true, hint='2–60 characters', attrs='maxlength="60"') }}
+    <label for="role">Role</label>
+    <select id="role" name="role">{% for r in roles %}<option value="{{ r.value }}" {% if form.role == r.value %}selected{% endif %}>{{ r.value }}</option>{% endfor %}</select>
+    {{ field('password', 'Password', errors, '', type='password', required=true, hint='8–64 characters', attrs='maxlength="64" autocomplete="new-password"') }}
+    <button type="submit">Create user</button>
+  </form>
+</section>
+<table>
+  <thead><tr><th scope="col">ID</th><th scope="col">Username</th><th scope="col">Name</th><th scope="col">Role</th></tr></thead>
+  <tbody>{% for u in users %}<tr><td>{{ u.id }}</td><td>{{ u.username }}</td><td>{{ u.display_name }}</td><td>{{ u.role.value }}</td></tr>{% endfor %}</tbody>
+</table>
+{% endblock %}

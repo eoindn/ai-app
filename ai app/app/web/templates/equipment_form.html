@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field %}
+{% block title %}{{ 'Add equipment' if mode == 'create' else 'Edit ' ~ e.equipment_id }}{% endblock %}
+{% block content %}
+<h1>{{ 'Add equipment' if mode == 'create' else 'Edit ' ~ e.equipment_id }}</h1>
+<form method="post" class="stacked" novalidate action="{{ '/equipment/new' if mode == 'create' else '/equipment/' ~ e.equipment_id ~ '/edit' }}">
+  {% if mode == 'create' %}
+  {{ field('equipment_id', 'Equipment ID', errors, form.equipment_id or '', required=true, hint='Format EQ- followed by 5 digits, e.g. EQ-00042', attrs='maxlength="8" autocomplete="off"') }}
+  {% endif %}
+  {{ field('name', 'Name', errors, form.name or '', required=true, hint='3–100 characters', attrs='maxlength="100"') }}
+  {{ field('location', 'Location', errors, form.location or '', required=true, hint='2–50 characters', attrs='maxlength="50"') }}
+  {{ field('description', 'Description', errors, form.description or '', type='textarea', hint='Up to 500 characters', attrs='maxlength="500"') }}
+  <button type="submit">{{ 'Create' if mode == 'create' else 'Save changes' }}</button>
+  <a href="{{ '/equipment' if mode == 'create' else '/equipment/' ~ e.equipment_id }}">Cancel</a>
+</form>
+{% endblock %}

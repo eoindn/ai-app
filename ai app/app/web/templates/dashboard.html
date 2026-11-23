@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% from "_macros.html" import status_badge %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+
+{% if availability %}
+<section aria-labelledby="avail-h">
+  <h2 id="avail-h">Equipment availability</h2>
+  <div class="cards">
+    <div class="card"><span class="num">{{ availability.total }}</span> total</div>
+    {% for status, n in availability.by_status.items() %}
+    <div class="card"><span class="num">{{ n }}</span> {{ status | replace('_', ' ') | lower }}</div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="grid-2">
+<section class="panel" aria-labelledby="faults-h">
+  <h2 id="faults-h">Outstanding faults ({{ faults.total_outstanding }})</h2>
+  <p>{% for sev, n in faults.by_severity.items() %}{{ sev | lower }}: <strong>{{ n }}</strong>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+  {% if faults.faults %}
+  <ul>{% for f in faults.faults[:5] %}<li><a href="/equipment/{{ f.equipment.equipment_id }}">{{ f.equipment.equipment_id }}</a>: {{ f.title }} ({{ f.severity.value }}, {{ f.status.value | replace('_',' ') | lower }})</li>{% endfor %}</ul>
+  <a href="/faults">All faults</a>
+  {% else %}<p class="muted">No outstanding faults.</p>{% endif %}
+</section>
+
+<section class="panel" aria-labelledby="maint-h">
+  <h2 id="maint-h">Maintenance</h2>
+  <p>Overdue: <strong class="{% if maintenance.overdue %}overdue{% endif %}">{{ maintenance.overdue | length }}</strong>
+   · Due in next 7 days: <strong>{{ maintenance.upcoming | length }}</strong>
+   · Completed {{ maintenance.from_date.strftime('%d %b') }}–{{ maintenance.to_date.strftime('%d %b %Y') }}: <strong>{{ maintenance.completed_count }}</strong></p>
+  {% if maintenance.overdue %}
+  <ul>{% for t in maintenance.overdue[:5] %}<li><span class="overdue">Overdue</span> {{ t.equipment.equipment_id }}: {{ t.title }} (due {{ t.due_date.strftime('%d %b %Y') }})</li>{% endfor %}</ul>
+  {% endif %}
+  {% if can('maintenance.view') %}<a href="/maintenance">All maintenance</a>{% endif %}
+</section>
+</div>
+{% endif %}
+
+<section aria-labelledby="mine-h">
+  <h2 id="mine-h">My upcoming bookings</h2>
+  {% if my_bookings %}
+  <table>
+    <thead><tr><th scope="col">Equipment</th><th scope="col">Start</th><th scope="col">End</th><th scope="col">Purpose</th></tr></thead>
+    <tbody>{% for b in my_bookings %}
+      <tr><td><a href="/equipment/{{ b.equipment.equipment_id }}">{{ b.equipment.equipment_id }}</a> {{ b.equipment.name }}</td><td>{{ b.start | dt }}</td><td>{{ b.end | dt }}</td><td>{{ b.purpose }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+  {% else %}<p class="muted">You have no upcoming bookings. <a href="/equipment">Find equipment to book</a>.</p>{% endif %}
+</section>
+{% endblock %}
