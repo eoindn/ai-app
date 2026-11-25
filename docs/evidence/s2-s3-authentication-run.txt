@@ -1,0 +1,148 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-9.2.0, pluggy-1.7.0 -- /Users/donnaz/ai app/.venv/bin/python
+rootdir: /Users/donnaz/ai app
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 92 items
+
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_route_discovery_is_not_empty PASSED [  1%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[DELETE /api/equipment/{equipment_id}] PASSED [  2%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/auth/me] PASSED [  3%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/bookings] PASSED [  4%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/bookings/{booking_id}] PASSED [  5%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/equipment] PASSED [  6%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/equipment/{equipment_id}] PASSED [  7%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/equipment/{equipment_id}/bookings] PASSED [  8%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/equipment/{equipment_id}/history] PASSED [  9%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/faults] PASSED [ 10%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/faults/{fault_id}] PASSED [ 11%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/maintenance] PASSED [ 13%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/maintenance/{task_id}] PASSED [ 14%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/reports/availability] PASSED [ 15%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/reports/faults] PASSED [ 16%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/reports/maintenance] PASSED [ 17%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[GET /api/users] PASSED [ 18%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[PATCH /api/equipment/{equipment_id}] PASSED [ 19%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/auth/logout] FAILED [ 20%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/bookings] PASSED [ 21%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/bookings/{booking_id}/cancel] PASSED [ 22%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/equipment] PASSED [ 23%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/equipment/{equipment_id}/status] PASSED [ 25%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/faults] PASSED [ 26%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/faults/{fault_id}/resolve] PASSED [ 27%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/faults/{fault_id}/start] PASSED [ 28%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/maintenance] PASSED [ 29%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/maintenance/{task_id}/assign] PASSED [ 30%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/maintenance/{task_id}/cancel] PASSED [ 31%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/maintenance/{task_id}/complete] PASSED [ 32%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/maintenance/{task_id}/start] PASSED [ 33%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/users] PASSED [ 34%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[DELETE /api/equipment/{equipment_id}] PASSED [ 35%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/auth/me] PASSED [ 36%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/bookings] PASSED [ 38%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/bookings/{booking_id}] PASSED [ 39%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/equipment] PASSED [ 40%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/equipment/{equipment_id}] PASSED [ 41%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/equipment/{equipment_id}/bookings] PASSED [ 42%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/equipment/{equipment_id}/history] PASSED [ 43%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/faults] PASSED [ 44%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/faults/{fault_id}] PASSED [ 45%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/maintenance] PASSED [ 46%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/maintenance/{task_id}] PASSED [ 47%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/reports/availability] PASSED [ 48%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/reports/faults] PASSED [ 50%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/reports/maintenance] PASSED [ 51%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[GET /api/users] PASSED [ 52%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[PATCH /api/equipment/{equipment_id}] PASSED [ 53%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/auth/logout] FAILED [ 54%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/bookings] PASSED [ 55%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/bookings/{booking_id}/cancel] PASSED [ 56%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/equipment] PASSED [ 57%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/equipment/{equipment_id}/status] PASSED [ 58%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/faults] PASSED [ 59%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/faults/{fault_id}/resolve] PASSED [ 60%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/faults/{fault_id}/start] PASSED [ 61%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/maintenance] PASSED [ 63%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/maintenance/{task_id}/assign] PASSED [ 64%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/maintenance/{task_id}/cancel] PASSED [ 65%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/maintenance/{task_id}/complete] PASSED [ 66%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/maintenance/{task_id}/start] PASSED [ 67%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/users] PASSED [ 68%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /] PASSED [ 69%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /bookings] PASSED [ 70%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /equipment] PASSED [ 71%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /equipment/new] PASSED [ 72%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /equipment/{equipment_id}] PASSED [ 73%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /equipment/{equipment_id}/edit] PASSED [ 75%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /faults] PASSED [ 76%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /maintenance] PASSED [ 77%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[GET /users] PASSED [ 78%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /bookings/{booking_id}/cancel] PASSED [ 79%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /equipment/new] PASSED [ 80%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /equipment/{equipment_id}/book] PASSED [ 81%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /equipment/{equipment_id}/delete] PASSED [ 82%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /equipment/{equipment_id}/edit] PASSED [ 83%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /equipment/{equipment_id}/fault] PASSED [ 84%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /equipment/{equipment_id}/status] PASSED [ 85%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /faults/{fault_id}/resolve] PASSED [ 86%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /faults/{fault_id}/start] PASSED [ 88%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /logout] PASSED [ 89%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /maintenance/new] PASSED [ 90%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /maintenance/{task_id}/{op}] PASSED [ 91%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_html_pages_redirect_to_login[POST /users] PASSED [ 92%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_health_is_public PASSED [ 93%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_session_expiry_boundary[8h-1s valid] PASSED [ 94%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_session_expiry_boundary[8h exactly expired] PASSED [ 95%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_session_expiry_boundary[8h+1s expired] PASSED [ 96%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_session_hours_setting_is_honoured PASSED [ 97%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_logout_invalidates_session_server_side PASSED [ 98%]
+tests/q4_nfr/security/test_s2_s3_authentication.py::test_logout_only_ends_own_session PASSED [100%]
+
+=================================== FAILURES ===================================
+_______________ test_api_requires_session[POST /api/auth/logout] _______________
+
+method = 'POST', path = '/api/auth/logout'
+anon_client = <starlette.testclient.TestClient object at 0x107908530>
+
+    @pytest.mark.parametrize(("method", "path"), API_ROUTES, ids=[f"{m} {p}" for m, p in API_ROUTES])
+    def test_api_requires_session(method: str, path: str, anon_client: TestClient) -> None:
+        """REQ-ROLE-01: no session → 401 UNAUTHENTICATED on every non-public /api endpoint."""
+        resp = anon_client.request(method, _fill(path))
+>       assert resp.status_code == 401, f"{method} {path} returned {resp.status_code}: {resp.text}"
+E       AssertionError: POST /api/auth/logout returned 204: 
+E       assert 204 == 401
+E        +  where 204 = <Response [204 No Content]>.status_code
+
+tests/q4_nfr/security/test_s2_s3_authentication.py:85: AssertionError
+----------------------------- Captured stdout call -----------------------------
+------------------------------ Captured log call -------------------------------
+INFO     lemms:logging.py:56 request
+________ test_api_rejects_forged_session_cookie[POST /api/auth/logout] _________
+
+method = 'POST', path = '/api/auth/logout'
+app = <fastapi.applications.FastAPI object at 0x1079be300>
+
+    @pytest.mark.parametrize(("method", "path"), API_ROUTES, ids=[f"{m} {p}" for m, p in API_ROUTES])
+    def test_api_rejects_forged_session_cookie(method: str, path: str, app: FastAPI) -> None:
+        """REQ-ROLE-01/03: a cookie value that is not a server-side session is treated as no session."""
+        with TestClient(app, cookies={SESSION_COOKIE: "forged-token-value"}) as client:
+            resp = client.request(method, _fill(path))
+>       assert resp.status_code == 401, f"{method} {path} returned {resp.status_code}"
+E       AssertionError: POST /api/auth/logout returned 204
+E       assert 204 == 401
+E        +  where 204 = <Response [204 No Content]>.status_code
+
+tests/q4_nfr/security/test_s2_s3_authentication.py:94: AssertionError
+----------------------------- Captured stdout call -----------------------------
+------------------------------ Captured log call -------------------------------
+INFO     lemms:logging.py:56 request
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_requires_session[POST /api/auth/logout]
+FAILED tests/q4_nfr/security/test_s2_s3_authentication.py::test_api_rejects_forged_session_cookie[POST /api/auth/logout]
+=================== 2 failed, 90 passed, 1 warning in 2.17s ====================
