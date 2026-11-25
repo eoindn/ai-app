@@ -1,0 +1,237 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-9.2.0, pluggy-1.7.0 -- /Users/donnaz/ai app/.venv/bin/python
+rootdir: /Users/donnaz/ai app
+configfile: pyproject.toml
+plugins: platformdirs-4.14.8, anyio-4.16.0
+collecting ... collected 20 items
+
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_login_failures_are_indistinguishable PASSED [  5%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_500_hides_internal_details PASSED [ 10%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_500_carries_request_id_header FAILED [ 15%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_academic_sees_others_bookings_masked PASSED [ 20%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_staff_see_all_booking_identities[admin] PASSED [ 25%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_staff_see_all_booking_identities[technician] PASSED [ 30%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_session_cookie_flags PASSED [ 35%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_secure_flag_follows_setting PASSED [ 40%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_passwords_stored_as_bcrypt_and_never_exposed PASSED [ 45%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[' OR 1=1--] PASSED [ 50%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[" OR ""="] PASSED [ 55%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text['; DROP TABLE equipment;--] PASSED [ 60%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[%] PASSED [ 65%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[_] PASSED [ 70%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[50%] PASSED [ 75%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[chem_] PASSED [ 80%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\\] PASSED [ 85%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\xc9quipement] FAILED [ 90%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\xe9quipement] FAILED [ 95%]
+tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\xc9QUIPEMENT] FAILED [100%]
+
+=================================== FAILURES ===================================
+______________________ test_500_carries_request_id_header ______________________
+
+server_error = <Response [500 Internal Server Error]>
+
+    def test_500_carries_request_id_header(server_error: Response) -> None:
+        """REQ-DATA-06: every response carries X-Request-ID, including errors."""
+>       assert server_error.headers.get("x-request-id") == "trace-123"
+E       AssertionError: assert None == 'trace-123'
+E        +  where None = get('x-request-id')
+E        +    where get = Headers({'content-length': '101', 'content-type': 'application/json'}).get
+E        +      where Headers({'content-length': '101', 'content-type': 'application/json'}) = <Response [500 Internal Server Error]>.headers
+
+tests/q4_nfr/security/test_s5_s12_hardening.py:92: AssertionError
+---------------------------- Captured stdout setup -----------------------------
+------------------------------ Captured log setup ------------------------------
+INFO     lemms:logging.py:56 login
+INFO     lemms:logging.py:56 request
+INFO     lemms:logging.py:56 request
+ERROR    lemms:logging.py:60 unhandled_exception
+Traceback (most recent call last):
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/_body_limit.py", line 80, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/donnaz/ai app/app/logging.py", line 103, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/prometheus_fastapi_instrumentator/middleware.py", line 180, in __call__
+    raise exc
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/prometheus_fastapi_instrumentator/middleware.py", line 178, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 2929, in app
+    await route.handle(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1916, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 3015, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1945, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 1373, in handle
+    await effective_context.app(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 175, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 161, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 762, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/routing.py", line 383, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/app/api/routes.py", line 120, in search_equipment
+    total, items = equipment_service.search(db, actor, q.strip() if q else None, status, limit, offset)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/donnaz/ai app/tests/q4_nfr/security/test_s5_s12_hardening.py", line 73, in boom
+    raise RuntimeError(LEAKY_MESSAGE)
+RuntimeError: boom at /Users/someone/app/services/equipment.py SELECT * FROM users
+___________ test_search_treats_input_as_literal_text[\xc9quipement] ____________
+
+q = 'Équipement', db = <sqlalchemy.orm.session.Session object at 0x114af3c20>
+client_as = <function client_as.<locals>._login at 0x114bc6fc0>
+app = <fastapi.applications.FastAPI object at 0x114af2ff0>
+
+    @pytest.mark.parametrize("q", PAYLOADS)
+    def test_search_treats_input_as_literal_text(
+        q: str, db: Session, client_as: Callable[[str], TestClient], app: FastAPI
+    ) -> None:
+        for row in SEEDED:
+            add_equipment(db, *row)
+        expected = sorted(
+            code for code, name, loc in SEEDED if any(q.lower() in f.lower() for f in (code, name, loc))
+        )
+    
+        resp = client_as("academic").get("/api/equipment", params={"q": q})
+    
+        assert resp.status_code == 200, resp.text
+>       assert sorted(i["equipment_id"] for i in resp.json()["items"]) == expected
+E       AssertionError: assert [] == ['EQ-00003']
+E         
+E         Right contains one more item: 'EQ-00003'
+E         
+E         Full diff: (-: missing in left side, +: extra in left side)
+E         + []
+E         - [
+E         -     'EQ-00003',
+E         - ]
+
+tests/q4_nfr/security/test_s5_s12_hardening.py:239: AssertionError
+----------------------------- Captured stdout call -----------------------------
+------------------------------ Captured log call -------------------------------
+INFO     lemms:logging.py:56 login
+INFO     lemms:logging.py:56 request
+INFO     lemms:logging.py:56 request
+___________ test_search_treats_input_as_literal_text[\xe9quipement] ____________
+
+q = 'équipement', db = <sqlalchemy.orm.session.Session object at 0x114d9d280>
+client_as = <function client_as.<locals>._login at 0x114bc74c0>
+app = <fastapi.applications.FastAPI object at 0x114d9f7d0>
+
+    @pytest.mark.parametrize("q", PAYLOADS)
+    def test_search_treats_input_as_literal_text(
+        q: str, db: Session, client_as: Callable[[str], TestClient], app: FastAPI
+    ) -> None:
+        for row in SEEDED:
+            add_equipment(db, *row)
+        expected = sorted(
+            code for code, name, loc in SEEDED if any(q.lower() in f.lower() for f in (code, name, loc))
+        )
+    
+        resp = client_as("academic").get("/api/equipment", params={"q": q})
+    
+        assert resp.status_code == 200, resp.text
+>       assert sorted(i["equipment_id"] for i in resp.json()["items"]) == expected
+E       AssertionError: assert [] == ['EQ-00003']
+E         
+E         Right contains one more item: 'EQ-00003'
+E         
+E         Full diff: (-: missing in left side, +: extra in left side)
+E         + []
+E         - [
+E         -     'EQ-00003',
+E         - ]
+
+tests/q4_nfr/security/test_s5_s12_hardening.py:239: AssertionError
+----------------------------- Captured stdout call -----------------------------
+------------------------------ Captured log call -------------------------------
+INFO     lemms:logging.py:56 login
+INFO     lemms:logging.py:56 request
+INFO     lemms:logging.py:56 request
+___________ test_search_treats_input_as_literal_text[\xc9QUIPEMENT] ____________
+
+q = 'ÉQUIPEMENT', db = <sqlalchemy.orm.session.Session object at 0x114b6f410>
+client_as = <function client_as.<locals>._login at 0x113f89ee0>
+app = <fastapi.applications.FastAPI object at 0x114b6dee0>
+
+    @pytest.mark.parametrize("q", PAYLOADS)
+    def test_search_treats_input_as_literal_text(
+        q: str, db: Session, client_as: Callable[[str], TestClient], app: FastAPI
+    ) -> None:
+        for row in SEEDED:
+            add_equipment(db, *row)
+        expected = sorted(
+            code for code, name, loc in SEEDED if any(q.lower() in f.lower() for f in (code, name, loc))
+        )
+    
+        resp = client_as("academic").get("/api/equipment", params={"q": q})
+    
+        assert resp.status_code == 200, resp.text
+>       assert sorted(i["equipment_id"] for i in resp.json()["items"]) == expected
+E       AssertionError: assert [] == ['EQ-00003']
+E         
+E         Right contains one more item: 'EQ-00003'
+E         
+E         Full diff: (-: missing in left side, +: extra in left side)
+E         + []
+E         - [
+E         -     'EQ-00003',
+E         - ]
+
+tests/q4_nfr/security/test_s5_s12_hardening.py:239: AssertionError
+----------------------------- Captured stdout call -----------------------------
+------------------------------ Captured log call -------------------------------
+INFO     lemms:logging.py:56 login
+INFO     lemms:logging.py:56 request
+INFO     lemms:logging.py:56 request
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/q4_nfr/security/test_s5_s12_hardening.py::test_500_carries_request_id_header
+FAILED tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\xc9quipement]
+FAILED tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\xe9quipement]
+FAILED tests/q4_nfr/security/test_s5_s12_hardening.py::test_search_treats_input_as_literal_text[\xc9QUIPEMENT]
+=================== 4 failed, 16 passed, 1 warning in 1.78s ====================

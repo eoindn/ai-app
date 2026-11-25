@@ -12,6 +12,8 @@ Design choices (all test-only, none change application behaviour):
 
 from __future__ import annotations
 
+import json
+import logging
 from collections.abc import Callable, Iterator
 from datetime import UTC, datetime
 
@@ -24,6 +26,7 @@ from sqlalchemy.orm import Session
 from app.clock import FixedClock
 from app.config import Settings
 from app.domain.enums import Role
+from app.logging import JsonFormatter
 from app.main import create_app
 from app.repositories.models import User
 
@@ -119,3 +122,23 @@ def client_as(app: FastAPI, users: dict[str, User]) -> Iterator[Callable[[str], 
     yield _login
     for client in opened:
         client.close()
+
+
+class _JsonCapture(logging.Handler):
+    def __init__(self) -> None:
+        super().__init__()
+        self.setFormatter(JsonFormatter())
+        self.lines: list[dict[str, object]] = []
+
+    def emit(self, record: logging.LogRecord) -> None:
+        self.lines.append(json.loads(self.format(record)))
+
+
+@pytest.fixture
+def log_lines(app: FastAPI) -> Iterator[list[dict[str, object]]]:
+    """Parsed JSON log lines from the app. The lemms logger does not propagate, so caplog misses it."""
+    handler = _JsonCapture()
+    logger = logging.getLogger("lemms")
+    logger.addHandler(handler)
+    yield handler.lines
+    logger.removeHandler(handler)
