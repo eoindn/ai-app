@@ -1,0 +1,14 @@
+Concurrency cliff probe, 2026-11-25, branch test/3-nfr-data-integrity
+Real uvicorn process (1 worker), file SQLite DB, 30 logged in users.
+Each row: N clients released together by a barrier, each sends GET /api/auth/me once.
+
+N=14 concurrent GET /api/auth/me -> statuses [200], slowest 0.01s
+N=15 concurrent GET /api/auth/me -> statuses [200], slowest 0.01s
+N=16 concurrent GET /api/auth/me -> statuses [200, 500], slowest 30.08s
+N=20 concurrent GET /api/auth/me -> statuses ['timeout'], slowest 40.00s
+
+Hypothesis tested: SQLAlchemy QueuePool allows 15 connections (pool_size 5 + max_overflow 10,
+pool_timeout 30 s). The async dependency get_optional_actor makes a blocking DB call on the event
+loop, so request 16 blocks the loop while waiting for a connection, and the 15 holders cannot
+finish to release theirs. Predicted: 15 fine, 16 stalls about 30 s. Observed: exactly that.
+The endpoint does no booking work, so the cliff is not caused by the booking lock.

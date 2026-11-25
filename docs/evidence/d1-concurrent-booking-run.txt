@@ -1,0 +1,78 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.4, pytest-9.2.0, pluggy-1.7.0 -- /Users/donnaz/ai app/.venv/bin/python
+rootdir: /Users/donnaz/ai app
+configfile: pyproject.toml
+plugins: platformdirs-4.14.8, anyio-4.16.0
+collecting ... collected 4 items
+
+tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=10] N=10: 20/20 rounds had exactly one winner
+PASSED
+tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=15] N=15: 20/20 rounds had exactly one winner
+PASSED
+tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=20] FAILED
+tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=50] FAILED
+
+=================================== FAILURES ===================================
+_____________________ test_exactly_one_booking_wins[N=20] ______________________
+
+n = 20
+server = ('http://127.0.0.1:52319', 'sqlite:////private/var/folders/dg/yvjy3y0s1yj4p8jz409qb2m00000gn/T/pytest-of-donnaz/pytest-3/d10/d1.db')
+clients = [<httpx.Client object at 0x108dbd850>, <httpx.Client object at 0x108d05010>, <httpx.Client object at 0x109d05fd0>, <httpx.Client object at 0x109d06db0>, <httpx.Client object at 0x109d07ce0>, <httpx.Client object at 0x109d069f0>, ...]
+
+    @pytest.mark.parametrize("n", SIZES, ids=[f"N={n}" for n in SIZES])
+    def test_exactly_one_booking_wins(n: int, server: tuple[str, str], clients: list[httpx.Client]) -> None:
+        """Each round: n parallel requests for clashing slots. Expect one 201 and n-1 409s, every round."""
+        results = []
+        for round_no in range(ROUNDS):
+            start = FIRST_SLOT + timedelta(hours=2 * (SIZES.index(n) * ROUNDS + round_no))
+            statuses = _race(n, start, clients)
+            results.append((dict(statuses), _confirmed_in(server[1], start)))
+            if statuses != Counter({201: 1, 409: n - 1}) or results[-1][1] != 1:
+>               pytest.fail(
+                    f"N={n} round {round_no + 1}: responses {dict(statuses)}, "
+                    f"{results[-1][1]} confirmed bookings in DB"
+                )
+E               Failed: N=20 round 1: responses {'timeout': 20}, 0 confirmed bookings in DB
+
+tests/q4_nfr/integrity/test_d1_concurrent_booking.py:166: Failed
+_____________________ test_exactly_one_booking_wins[N=50] ______________________
+
+n = 50
+server = ('http://127.0.0.1:52319', 'sqlite:////private/var/folders/dg/yvjy3y0s1yj4p8jz409qb2m00000gn/T/pytest-of-donnaz/pytest-3/d10/d1.db')
+clients = [<httpx.Client object at 0x108dbd850>, <httpx.Client object at 0x108d05010>, <httpx.Client object at 0x109d05fd0>, <httpx.Client object at 0x109d06db0>, <httpx.Client object at 0x109d07ce0>, <httpx.Client object at 0x109d069f0>, ...]
+
+    @pytest.mark.parametrize("n", SIZES, ids=[f"N={n}" for n in SIZES])
+    def test_exactly_one_booking_wins(n: int, server: tuple[str, str], clients: list[httpx.Client]) -> None:
+        """Each round: n parallel requests for clashing slots. Expect one 201 and n-1 409s, every round."""
+        results = []
+        for round_no in range(ROUNDS):
+            start = FIRST_SLOT + timedelta(hours=2 * (SIZES.index(n) * ROUNDS + round_no))
+            statuses = _race(n, start, clients)
+            results.append((dict(statuses), _confirmed_in(server[1], start)))
+            if statuses != Counter({201: 1, 409: n - 1}) or results[-1][1] != 1:
+>               pytest.fail(
+                    f"N={n} round {round_no + 1}: responses {dict(statuses)}, "
+                    f"{results[-1][1]} confirmed bookings in DB"
+                )
+E               Failed: N=50 round 1: responses {'timeout': 50}, 0 confirmed bookings in DB
+
+tests/q4_nfr/integrity/test_d1_concurrent_booking.py:166: Failed
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/donnaz/ai app/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================== slowest durations ===============================
+45.04s call     tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=20]
+45.03s call     tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=50]
+1.68s setup    tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=10]
+0.53s call     tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=15]
+0.37s call     tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=10]
+0.01s teardown tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=50]
+
+(6 durations < 0.005s hidden.  Use -vv to show these durations.)
+=========================== short test summary info ============================
+FAILED tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=20]
+FAILED tests/q4_nfr/integrity/test_d1_concurrent_booking.py::test_exactly_one_booking_wins[N=50]
+============== 2 failed, 2 passed, 1 warning in 92.73s (0:01:32) ===============

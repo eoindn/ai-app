@@ -1,0 +1,3 @@
+E               Failed: N=10 round 1: responses {201: 8, 409: 2}, 8 confirmed bookings in DB
+E               Failed: N=15 round 1: responses {409: 13, 201: 2}, 2 confirmed bookings in DB
+2 failed, 1 warning in 1.73s
