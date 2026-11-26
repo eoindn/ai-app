@@ -1,0 +1,20 @@
+# P1 to P3 results (median of runs)
+
+| Scenario | Users | Endpoint | Requests | Failure % | p50 ms | p95 ms | Max ms | Req/s |
+|---|---|---|---|---|---|---|---|---|
+| P1-P2 | 10 | browse: search | 205 | 0.0 | 9 | 22 | 48 | 3.5 |
+| P1-P2 | 10 | schedule: view | 68 | 0.0 | 8 | 13 | 34 | 1.1 |
+| P1-P2 | 10 | book: create | 32 | 0.0 | 13 | 21 | 38 | 0.5 |
+| P1-P2 | 10 | Aggregated | 307 | 0.0 | 9 | 26 | 48 | 5.2 |
+| P1-P2 | 50 | browse: search | 1020 | 0.0 | 7 | 15 | 67 | 17.2 |
+| P1-P2 | 50 | schedule: view | 279 | 0.0 | 6 | 12 | 37 | 4.7 |
+| P1-P2 | 50 | book: create | 144 | 0.0 | 11 | 19 | 43 | 2.4 |
+| P1-P2 | 50 | Aggregated | 1493 | 0.0 | 7 | 20 | 91 | 25.2 |
+| P1-P2 | 100 | browse: search | 1916 | 0.0 | 6 | 15 | 66 | 32.4 |
+| P1-P2 | 100 | schedule: view | 566 | 0.0 | 5 | 14 | 56 | 9.6 |
+| P1-P2 | 100 | book: create | 282 | 0.0 | 8 | 18 | 65 | 4.8 |
+| P1-P2 | 100 | Aggregated | 2869 | 0.0 | 6 | 24 | 125 | 48.5 |
+| P3-volume | 50 | browse: search | 1005 | 0.0 | 7 | 14 | 56 | 17.0 |
+| P3-volume | 50 | schedule: view | 286 | 0.0 | 7 | 13 | 43 | 4.8 |
+| P3-volume | 50 | book: create | 164 | 0.0 | 9 | 19 | 51 | 2.8 |
+| P3-volume | 50 | Aggregated | 1505 | 0.0 | 7 | 19 | 114 | 25.4 |

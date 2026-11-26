@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[3]
 OUT = ROOT / "docs" / "evidence" / "perf"
 LOCUSTFILE = Path(__file__).with_name("locustfile.py")
 SCENARIOS = [("P1-P2", users, 0) for users in (10, 50, 100)] + [("P3-volume", 50, 5000)]
+STRESS = [("stress", users, 0) for users in (10, 15, 16, 20, 50)]
 ENDPOINTS = ["browse: search", "schedule: view", "book: create", "Aggregated"]
 
 
@@ -41,6 +42,8 @@ def run_once(name: str, users: int, extra: int, run: int, duration: int) -> Path
         seed(db_url, extra_bookings=extra)
         port = _free_port()
         env = {**os.environ, "LEMMS_DATABASE_URL": db_url, "PYTHONPATH": str(ROOT)}
+        if name == "stress":
+            env["LEMMS_NO_THINK"] = "1"
         server = subprocess.Popen(
             [sys.executable, "-m", "uvicorn", "app.main:app", "--port", str(port), "--log-level", "warning"],
             cwd=ROOT,
@@ -132,17 +135,18 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--duration", type=int, default=60)
     parser.add_argument("--runs", type=int, default=3)
+    parser.add_argument("--stress", action="store_true", help="no think time, users 10 to 50")
     args = parser.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     results: dict[tuple[str, int], list[dict[str, dict[str, float]]]] = {}
-    for name, users, extra in SCENARIOS:
+    for name, users, extra in STRESS if args.stress else SCENARIOS:
         for run in range(1, args.runs + 1):
             print(f"{name} users={users} run {run}", flush=True)
             results.setdefault((name, users), []).append(
                 read_stats(run_once(name, users, extra, run, args.duration))
             )
     summary = summarise(results)
-    (OUT / "summary.md").write_text(summary)
+    (OUT / ("stress-summary.md" if args.stress else "summary.md")).write_text(summary)
     print(summary)
 
 
